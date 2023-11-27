@@ -12,7 +12,7 @@ const secondRow = 1;
 const thirdRow = 2;
 
 export class Game {
-  private _lastSymbol = ' ';
+  private _lastSymbol = emptySymbol;
 
   private _board: Board = new Board();
 
