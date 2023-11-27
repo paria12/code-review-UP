@@ -2,6 +2,15 @@
 
 export class Game {
   private _lastSymbol = ' ';
+  private readonly emptySymbol = ' ';
+  private readonly playerOneSymbol = 'O';
+  private readonly firstColumn = 0;
+  private readonly secondColumn = 1;
+  private readonly thirdColumn = 2;
+  private readonly firstRow = 0;
+  private readonly secondRow = 1;
+  private readonly thirdRow = 2;
+
   private _board: Board = new Board();
 
   public Play(symbol: string, x: number, y: number): void {
@@ -14,8 +23,8 @@ export class Game {
   }
 
   private validateFirstMove(player: string) {
-    if (this._lastSymbol == ' ') {
-      if (player == 'O') {
+    if (this._lastSymbol == this.emptySymbol) {
+      if (player == this.playerOneSymbol) {
         throw new Error('Invalid first player');
       }
     }
@@ -28,7 +37,7 @@ export class Game {
   }
 
   private validatePositionIsEmpty(x: number, y: number) {
-    if (this._board.TileAt(x, y).Symbol != ' ') {
+    if (this._board.TileAt(x, y).Symbol != this.emptySymbol) {
       throw new Error('Invalid position');
     }
   }
@@ -43,62 +52,62 @@ export class Game {
 
   public Winner(): string {
     if (this.isFirstRowFull() && this.isFirstRowFullWithSameSymbol()) {
-      return this._board.TileAt(0, 0)!.Symbol;
+      return this._board.TileAt(this.firstRow, this.firstColumn)!.Symbol;
     }
 
     if (this.isSecondRowFull() && this.isSecondRowFullWithSameSymbol()) {
-      return this._board.TileAt(1, 0)!.Symbol;
+      return this._board.TileAt(this.secondRow, this.firstColumn)!.Symbol;
     }
 
     if (this.isThirdRowFull() && this.isThirdRowFullWithSameSymbol()) {
-      return this._board.TileAt(2, 0)!.Symbol;
+      return this._board.TileAt(this.thirdRow, this.firstColumn)!.Symbol;
     }
 
-    return ' ';
+    return this.emptySymbol;
   }
 
   private isFirstRowFull() {
     return (
-      this._board.TileAt(0, 0)!.Symbol != ' ' &&
-      this._board.TileAt(0, 1)!.Symbol != ' ' &&
-      this._board.TileAt(0, 2)!.Symbol != ' '
+      this._board.TileAt(this.firstRow, this.firstColumn)!.Symbol != this.emptySymbol &&
+      this._board.TileAt(this.firstRow, this.secondColumn)!.Symbol != this.emptySymbol &&
+      this._board.TileAt(this.firstRow, this.thirdColumn)!.Symbol != this.emptySymbol
     );
   }
 
   private isFirstRowFullWithSameSymbol() {
     return (
-      this._board.TileAt(0, 0)!.Symbol == this._board.TileAt(0, 1)!.Symbol &&
-      this._board.TileAt(0, 2)!.Symbol == this._board.TileAt(0, 1)!.Symbol
+      this._board.TileAt(this.firstRow, this.firstColumn)!.Symbol == this._board.TileAt(this.firstRow, this.secondColumn)!.Symbol &&
+      this._board.TileAt(this.firstRow, this.thirdColumn)!.Symbol == this._board.TileAt(this.firstRow, this.secondColumn)!.Symbol
     );
   }
 
   private isSecondRowFull() {
     return (
-      this._board.TileAt(1, 0)!.Symbol != ' ' &&
-      this._board.TileAt(1, 1)!.Symbol != ' ' &&
-      this._board.TileAt(1, 2)!.Symbol != ' '
+      this._board.TileAt(this.secondRow, this.firstColumn)!.Symbol != this.emptySymbol &&
+      this._board.TileAt(this.secondRow, this.secondColumn)!.Symbol != this.emptySymbol &&
+      this._board.TileAt(this.secondRow, this.thirdColumn)!.Symbol != this.emptySymbol
     );
   }
 
   private isSecondRowFullWithSameSymbol() {
     return (
-      this._board.TileAt(1, 0)!.Symbol == this._board.TileAt(1, 1)!.Symbol &&
-      this._board.TileAt(1, 2)!.Symbol == this._board.TileAt(1, 1)!.Symbol
+      this._board.TileAt(this.secondRow, this.firstColumn)!.Symbol == this._board.TileAt(this.secondRow, this.secondColumn)!.Symbol &&
+      this._board.TileAt(this.secondRow, this.thirdColumn)!.Symbol == this._board.TileAt(this.secondRow, this.secondColumn)!.Symbol
     );
   }
 
   private isThirdRowFull() {
     return (
-      this._board.TileAt(2, 0)!.Symbol != ' ' &&
-      this._board.TileAt(2, 1)!.Symbol != ' ' &&
-      this._board.TileAt(2, 2)!.Symbol != ' '
+      this._board.TileAt(this.thirdRow, this.firstColumn)!.Symbol != this.emptySymbol &&
+      this._board.TileAt(this.thirdRow, this.secondColumn)!.Symbol != this.emptySymbol &&
+      this._board.TileAt(this.thirdRow, this.thirdColumn)!.Symbol != this.emptySymbol
     );
   }
 
   private isThirdRowFullWithSameSymbol() {
     return (
-      this._board.TileAt(2, 0)!.Symbol == this._board.TileAt(2, 1)!.Symbol &&
-      this._board.TileAt(2, 2)!.Symbol == this._board.TileAt(2, 1)!.Symbol
+      this._board.TileAt(this.thirdRow, this.firstColumn)!.Symbol == this._board.TileAt(this.thirdRow, this.secondColumn)!.Symbol &&
+      this._board.TileAt(this.thirdRow, this.thirdColumn)!.Symbol == this._board.TileAt(this.thirdRow, this.secondColumn)!.Symbol
     );
   }
 }
@@ -111,11 +120,12 @@ interface Tile {
 
 class Board {
   private _plays: Tile[] = [];
+  private readonly emptySymbol = ' ';
 
   constructor() {
     for (let i = 0; i < 3; i++) {
       for (let j = 0; j < 3; j++) {
-        const tile: Tile = { X: i, Y: j, Symbol: ' ' };
+        const tile: Tile = { X: i, Y: j, Symbol: this.emptySymbol };
         this._plays.push(tile);
       }
     }
